@@ -1,8 +1,13 @@
 from django.shortcuts import render
+from .forms import *
 
 # Create your views here.
 
+def brouillon(request):
 
+    context={}
+
+    return render(request,'brouillon.html',context)
 # Vue Welcome
 def welcome(request):
     context={}

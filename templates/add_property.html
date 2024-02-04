@@ -1,0 +1,51 @@
+{% extends "display.html" %}{% load static %}
+
+{% block content %}
+
+<form method="post" action="{% url 'add_property' %}">
+    {% csrf_token %}
+ 
+    {{ property_form.as_p }}
+    <a href="" style="border:none;background:#222;border-radius:8px;text-align:center;"type="button" id="add-detail-form">suivant</a>
+    
+    
+    <div id="detail-form-div" style="">
+        
+    </div>
+
+    <div class='address-form-div' id='address-form-div'>
+        <h3>Détails addresse</h3>
+        {% if address_form %}
+        {{ address_form.as_p }}
+    {% endif %}
+</div>
+    
+    <button style=";"type="submit">Ajouter Propriété</button>
+  </form>
+  <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+
+  <script>
+    $(document).ready(function() {
+        $(document).on('click','#add-detail-form',function(e) {
+            e.preventDefault(); // Empêche le formulaire de se soumettre normalement
+            id_property_type=document.getElementById('id_property_type').value;
+           $.ajax({
+                type: 'get',
+                url: "{% url 'add_property' %}",
+                data: 'add_detail_property=add_detail_property&id_property_type='+id_property_type,
+                success: function(data) {
+                    d=data.form
+                    $("#detail-form-div").html(d);
+                    $("#detail-form-div").slideDown('0.8s')
+                    
+                    
+                    
+                    
+
+
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}

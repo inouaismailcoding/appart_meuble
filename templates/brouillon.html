@@ -1,0 +1,92 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <title>File Input Button</title>
+    <style>
+        body{
+            padding:20px;
+        }
+        .fileButton {
+            background-color: #4CAF50;
+            border-radius: 12px;
+            width: 70px;
+            height: 30px;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .fileInput {
+            display: none;
+        }
+
+        .previewImage {
+            max-width: 300px;
+            max-height: 300px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>File Input Button</h1>
+
+    {{PropertyForm.as_p}}
+
+    <div style='display:flex;flex-direction:row;justify-content:space-between;'> 
+        
+        {% for file_number in "1234" %}
+        
+            <div>
+                <span>Photo N°: {{ file_number }}"</span>
+                <button class='fileButton' data-file="{{ file_number }}">Choose</button>
+                <input type="file" class='fileInput' id="fileInput{{ file_number }}" name="fileInput{{ file_number }}" />
+                <img class="previewImage" id="preview{{ file_number }}" alt="Preview Image">
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        $(document).ready(function(){
+        
+            $(document).on('click','.fileButton',function(e) {
+                e.preventDefault();
+                var fileNumber = $(this).data('file');
+                var fileInputId = 'fileInput' + fileNumber;
+                document.getElementById(fileInputId).click();
+                choose(fileNumber)
+                
+            });
+
+           function choose(fileNumber){
+
+            $(document).on('change','#fileInput'+fileNumber,function(e) {
+                e.preventDefault();
+                displaySelectedFile(fileNumber);
+            });
+           }
+     
+
+        function displaySelectedFile(fileNumber) {
+            var input = document.getElementById('fileInput' + fileNumber);
+            var preview = document.getElementById('preview' + fileNumber);
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+    
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    });
+    </script>
+</body>
+</html>

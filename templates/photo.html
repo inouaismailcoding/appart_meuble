@@ -1,0 +1,42 @@
+{% extends "display.html" %}{% load static %}
+{% block title %}photo{% endblock title %}
+{% block content %}
+<h2>Upload Photos</h2>
+    <form id="photoForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+    
+    <div id="preview"></div>
+
+    <script>
+        document.getElementById('id_images').addEventListener('change', function(e) {
+            e.preventDefault();
+            //var files = this.elements['image'].files;
+            //var files =document.getElementById('id_images');
+            var files = e.target.files
+            var preview = document.getElementById('preview');
+            preview.innerHTML = '';
+           
+            var formData = new FormData();
+            let tab=[]
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                tab.push(file);
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    var img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.width = 200;
+                    preview.appendChild(img);
+                }
+                FormData.append('files[]',file)
+                reader.readAsDataURL(file);
+            }
+            
+            
+        });
+    </script>
+{% endblock content %}
